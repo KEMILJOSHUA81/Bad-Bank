@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transanction Page</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="BB.HTML">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="transfer.html">Transfer Amount</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+   
+    <div id="transaction-area" class="container my-4" style="display: none;">
+        <div class="row text-center">
+            <div class="col-md-4">
+                <div class="status deposit border p-3">
+                    <h5>Deposit</h5>
+                    <h2>&#8377 <span id="currentDeposit">00.00</span></h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="status withdraw border p-3">
+                    <h5>Withdraw</h5>
+                    <h2>&#8377 <span id="currentWithdraw">00.00</span></h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="status balance border p-3">
+                    <h5>Balance</h5>
+                    <h2>&#8377 <span id="currentBalance">10000.00</span></h2>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row my-4">
+            <div class="col-md-6">
+                <div class="submit-area">
+                    <h4>Deposit</h4>
+                    <input id="depositAmount" type="text" class="form-control" placeholder="₹ amount you want to Deposit"><br>
+                    <button id="depositBtn" class="btn btn-success">Deposit</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="submit-area">
+                    <h4>Withdraw</h4>
+                    <input id="withdrawAmount" type="text" class="form-control" placeholder="₹ amount you want to Withdraw"><br>
+                    <button id="withdrawBtn" class="btn btn-danger">Withdraw</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+    
+        window.onload = function() {
+            const transactionArea = document.getElementById('transaction-area');
+            transactionArea.style.display = 'block';
+        };
+    
+        const depositBtn = document.getElementById('depositBtn');
+        depositBtn.addEventListener('click', function() {
+            const depositAmountNumber = inputAmount('depositAmount');
+            if (depositAmountNumber > 0) {
+                spanAmount('currentDeposit', depositAmountNumber);
+                spanAmount('currentBalance', depositAmountNumber);
+            } else {
+                alert("Please enter a valid deposit amount.");
+            }
+        });
+    
+        const withdrawBtn = document.getElementById('withdrawBtn');
+        withdrawBtn.addEventListener('click', function() {
+            const withdrawAmountNumber = inputAmount('withdrawAmount');
+            const currentBalance = parseFloat(document.getElementById('currentBalance').innerText);
+    
+            if (withdrawAmountNumber > 0) {
+                if (withdrawAmountNumber <= currentBalance) {
+                    spanAmount('currentWithdraw', withdrawAmountNumber);
+                    spanAmount('currentBalance', -1 * withdrawAmountNumber);
+                } else {
+                    alert("Insufficient balance! Please enter a smaller amount.");
+                }
+            } else {
+                alert("Please enter a valid withdrawal amount.");
+            }
+        });
+    
+        function inputAmount(id) {
+            const amount = document.getElementById(id).value;
+            const amountNumber = parseFloat(amount);
+            document.getElementById(id).value = "";
+            return isNaN(amountNumber) || amountNumber < 0 ? 0 : amountNumber; // Return 0 if input is invalid
+        }
+    
+        function spanAmount(id, amount) {
+            const currentAmount = document.getElementById(id).innerText;
+            const currentAmountNumber = parseFloat(currentAmount);
+            const totalAmount = amount + currentAmountNumber;
+            document.getElementById(id).innerText = totalAmount.toFixed(2); // Format to 2 decimal places
+        }
+    </script>
+    
+</body>
+</html>

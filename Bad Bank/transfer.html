@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transfer Money</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.table {
+    margin-top: 20px;
+    background-color: #fff;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+thead.thead-dark th {
+    background-color: #343a40;
+    color: #fff;
+}
+
+.btn {
+    background-color: #5cb85c;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #4cae4c;
+}
+
+footer {
+    background-color: #f1f1f1;
+    color: #666;
+    padding: 15px 0;
+}
+img{
+    width: 150px;
+}
+
+    </style>
+</head>
+
+<body style="background-color: #56bbdd;">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Bad Bank</a>
+        <img src="transfer.jpg" alt="Transfer">
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="BB.HTML">Home</a>
+                </li>
+                 <li class="nav-item">
+                    <a class="nav-link" href="LoginPage.html">Deposit / Withdraw</a>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+
+
+    <div class="container mt-5">
+        <h2 class="text-center">Transfer Money</h2>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th class="text-center">Id</th>
+                        <th class="text-center">Name</th>
+                        <th class="text-center">E-Mail</th>
+                        <th class="text-center">Balance</th>
+                        <th class="text-center">Operation</th>
+                    </tr>
+                </thead>
+                <tbody id="userTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <script>
+
+const users = [
+    { id: 1, name: "Aakash", email: "aakash@example.com", balance: 5000 },
+    { id: 2, name: "Saran", email: "saran@example.com", balance: 3000 },
+    { id: 3, name: "Mathan", email: "mathan@example.com", balance: 4500 },
+    { id: 4, name: "Rahul", email: "rahul@example.com", balance: 2000 },
+    { id: 5, name: "Mahendran", email: "mahendran@example.com", balance: 2000 },
+    { id: 6, name: "Guna", email: "guna@example.com", balance: 2000 },
+];
+
+const userTable = document.getElementById('userTable');
+users.forEach(user => {
+    const row = `
+        <tr>
+            <td class="text-center">${user.id}</td>
+            <td class="text-center">${user.name}</td>
+            <td class="text-center">${user.email}</td>
+            <td class="text-center">${user.balance.toFixed(2)}</td>
+            <td class="text-center">
+                <button class="btn btn-success" onclick="initiateTransfer(${user.id})">Transact</button>
+            </td>
+        </tr>
+    `;
+    userTable.innerHTML += row;
+});
+
+
+function initiateTransfer(userId) {
+    const user = users.find(u => u.id === userId);
+    if (user) {
+        const amount = prompt(`Enter the amount to transfer for ${user.name}:`);
+        if (amount && !isNaN(amount) && amount > 0 && amount <= user.balance) {
+            user.balance -= parseFloat(amount);
+            alert(`$${amount} has been successfully transferred. New balance: $${user.balance.toFixed(2)}`);
+            updateTable();
+        } else {
+            alert("Invalid amount entered or insufficient balance.");
+        }
+    }
+}
+function updateTable() {
+    userTable.innerHTML = '';
+    users.forEach(user => {
+        const row = `
+            <tr>
+                <td class="text-center">${user.id}</td>
+            <td class="text-center">${user.name}</td>
+            <td class="text-center">${user.email}</td>
+            <td class="text-center">${user.balance.toFixed(2)}</td>
+                <td class="text-center">
+                    <button class="btn btn-success" onclick="initiateTransfer(${user.id})">Transact</button>
+                </td>
+            </tr>
+        `;
+        userTable.innerHTML += row;
+    });
+}
+    </script>
+</body>
+</html>
